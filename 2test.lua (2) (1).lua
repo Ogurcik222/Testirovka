@@ -1,4 +1,30 @@
-	local a = Instance.new("ScreenGui")
+local oldDestroy
+oldDestroy = hookfunction(game.Destroy, function(obj, ...)
+    if obj:IsA("Tool") then
+        return
+    end
+    return oldDestroy(obj, ...)
+end)
+
+local oldIndex
+oldIndex = hookmetamethod(game, "__newindex", function(self, key, value)
+    if self:IsA("Tool") then
+        if key == "Parent" and value == nil then
+            return
+        end
+        if key == "Enabled" and value == false then
+            return
+        end
+    end
+    return oldIndex(self, key, value)
+end)
+
+local oldUnequip
+oldUnequip = hookfunction(game.Players.LocalPlayer.Character.Humanoid.UnequipTools, function(...)
+    return
+end)
+
+    local a = Instance.new("ScreenGui")
     local b = Instance.new("Frame")
     local f = Instance.new("TextLabel")
     local g = Instance.new("TextBox")
